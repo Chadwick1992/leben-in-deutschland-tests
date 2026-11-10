@@ -25,7 +25,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
 .top h1{font-size:20px;margin:0;margin-right:auto;text-wrap:balance}
 select,input[type=search],input[type=number]{font:inherit;font-size:16px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:7px 10px;min-width:0}
-label.f{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:13px}
+label.f{min-width:0;max-width:100%;display:flex;align-items:center;gap:6px;color:var(--muted);font-size:13px}
+.f select{min-width:0;max-width:100%;text-overflow:ellipsis}
+.st{flex:1 1 260px}.st select{flex:1 1 auto;width:100%}
 .tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:16px;overflow-x:auto}
 .tabs a{padding:10px 14px;color:var(--muted);text-decoration:none;font-weight:600;white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-1px}
 .tabs a[aria-current=page]{color:var(--accent);border-bottom-color:var(--accent)}
@@ -271,7 +273,7 @@ function startView(){
   const nSeenG=GEN.filter(id=>S.seen[id]).length;
   return `<div class="card"><h2>${t('mockTitle')}</h2>
     <p class="muted">${t('mockIntro')}</p>
-    <div class="row"><label class="f">${t('state')}
+    <div class="row"><label class="f st">${t('state')}
       <select id="state">${STATES.map(s=>`<option value="${s[0]}" ${s[0]===st?'selected':''}>${esc(t('stName',s[0]))}</option>`).join('')}</select></label>
       <button class="btn" data-act="startMock">${t('startMock')}</button></div>
     <p class="muted small" style="margin-bottom:0">${t('seenInfo',nSeenG,GEN.length)}</p></div>
