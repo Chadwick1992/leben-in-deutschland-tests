@@ -315,7 +315,7 @@ function runView(){
   const c=S.cur;
   return `<div class="bar"><span class="grow"><b>${esc(kindLabel({kind:c.kind,st:c.st}))}</b></span>
     <span>${t('left')} <span class="t" id="tleft">--:--</span></span><span>${t('answered')} <b id="tdone">0</b>/${c.n}</span>
-    <button class="btn sm" data-act="submit">${t('submit')}</button></div>
+    <button class="btn sm" data-act="submit">${t('submit')}</button><button class="btn danger sm" data-act="abandon">${t('abandon')}</button></div>
     <p class="muted small">${t('clockNote')}</p>
     ${c.ids.map((id,i)=>qCard(BY.get(id),{n:i,mode:'exam',chosen:c.ans[i]})).join('')}
     <div class="row"><button class="btn" data-act="submit">${t('submit')}</button><button class="btn danger" data-act="abandon">${t('abandon')}</button></div>`;
