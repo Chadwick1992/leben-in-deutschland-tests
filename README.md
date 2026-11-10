@@ -29,7 +29,7 @@ A single-file web app for practising the German citizenship test (*Einbürgerung
 
 Open `index.html`. To host it online: create a **public** repository, upload this file, then *Settings → Pages → Deploy from a branch → `main` / root*.
 
-Your results stay in the browser you use. Export a backup before switching devices.
+Results are stored in the browser you use. To sync phone and computer, connect your own GitHub under History → Cloud sync (a private Gist, token with `gist` scope only, kept in that browser). Export/import JSON remains as a manual backup.
 
 ## Notes
 
@@ -66,7 +66,7 @@ The German questions come from the official catalogue; the answer key was proofr
 
 打开 `index.html` 即可。想放到网上：新建一个**公开**仓库，上传这个文件，然后在 *Settings → Pages → Deploy from a branch → `main` / root* 里开启。
 
-成绩只保存在你使用的那个浏览器里，换设备前请先导出备份。
+成绩保存在你使用的浏览器里。要让手机和电脑同步，请在“成绩记录 → 云端同步”里连接你自己的 GitHub（私有 Gist，令牌只需 gist 权限，仅保存在该浏览器）。导出/导入 JSON 仍可作为手动备份。
 
 ## 说明
 
