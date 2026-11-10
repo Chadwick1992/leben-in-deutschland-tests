@@ -12,7 +12,7 @@ A single-file web app for practising the German citizenship test (*Einbürgerung
 | Version | 1.0 (November 2026) |
 | Question set | 460 questions: 300 general + 10 for each of the 16 states |
 | Real test format | 33 questions (30 general + 3 state), 60 minutes, 17 correct to pass |
-| Languages | German questions; Chinese / English for the interface and as a reading aid (both switchable) |
+| Languages | German questions; interface language: Chinese / English; question help language: Chinese / English / none |
 | Tech | One HTML file, plain JavaScript, data in the browser (localStorage) |
 | Status | Unofficial practice tool, not affiliated with BAMF |
 
@@ -22,7 +22,7 @@ A single-file web app for practising the German citizenship test (*Einbürgerung
 - **Question bank:** all 460 questions with search, state filter and answers.
 - **Wrong-answer book:** wrong or skipped questions are collected automatically; build an exam from them. Two correct answers in a row mark a question as mastered.
 - **History:** score, pass/fail, time used, date and time of every session, total training time and a trend chart. Export / import a backup as JSON.
-- **Two language switches:** interface language (中文 / English) and question help language (中文 / English).
+- **Two language switches:** interface language (中文 / English) and question help language (中文 / English / none).
 - **Mobile friendly.**
 
 ## Use
@@ -49,7 +49,7 @@ The German questions come from the official catalogue; the answer key was proofr
 | 版本 | 1.0（2026 年 11 月） |
 | 题库 | 460 题：300 道通用题加 16 个州各 10 道 |
 | 正式考试格式 | 33 题（30 道通用题加 3 道州题），60 分钟，答对 17 题及格 |
-| 语言 | 题目为德语；界面语言和题目辅助语言都可以在中文和 English 之间切换 |
+| 语言 | 题目为德语；界面语言可选中文或 English，题目辅助语言可选中文、English 或无 |
 | 技术 | 一个 HTML 文件，原生 JavaScript，数据保存在浏览器（localStorage） |
 | 性质 | 非官方练习工具，与 BAMF 无关联 |
 
@@ -59,7 +59,7 @@ The German questions come from the official catalogue; the answer key was proofr
 - **题库：** 全部 460 题，可搜索、按州筛选、查看答案。
 - **错题本：** 答错或没答的题自动收集，可以用错题生成试卷。同一题连续答对 2 次标为“已掌握”。
 - **成绩记录：** 每次的得分、是否及格、用时、开始日期和时间，累计训练时间和走势图。可导出和导入 JSON 备份。
-- **两个语言开关：** 界面语言（中文 / English）和题目辅助语言（中文 / English）。
+- **两个语言开关：** 界面语言（中文 / English）和题目辅助语言（中文 / English / 无）。
 - **适配手机浏览器。**
 
 ## 使用

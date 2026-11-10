@@ -104,7 +104,7 @@ const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 /* ---------- interface text, Chinese and English ---------- */
 const I18N = {
 zh:{
-  uiLang:'界面语言', auxLang:'题目辅助语言',
+  uiLang:'界面语言', auxLang:'题目辅助语言', none:'无',
   tabExam:'模拟考试', tabBank:'题库', tabWrong:'错题本', tabHist:'成绩', running:'进行中',
   foot:'非官方练习工具。题目为德语官方题库（300 道通用题加 16 个州各 10 道），中文和英文只用来辅助理解，答案以德语题目为准。成绩和错题保存在本机浏览器里，换设备请先在“成绩”页导出备份。',
   mockTitle:'模拟考试',
@@ -144,7 +144,7 @@ zh:{
   dur:(h,m,x)=>h?`${h} 小时 ${pad(m)} 分`:m?`${m} 分 ${pad(x)} 秒`:`${x} 秒`
 },
 en:{
-  uiLang:'Interface language', auxLang:'Question help language',
+  uiLang:'Interface language', auxLang:'Question help language', none:'None',
   tabExam:'Mock exam', tabBank:'Question bank', tabWrong:'Wrong answers', tabHist:'History', running:'In progress',
   foot:'Unofficial practice tool. Questions come from the official German catalogue (300 general questions plus 10 for each of the 16 states). Chinese and English texts are only a reading aid; the German question is what counts. Scores and wrong answers are stored in this browser. Export a backup on the History page before switching devices.',
   mockTitle:'Mock exam',
@@ -191,7 +191,7 @@ function load(){
   S = Object.assign({v:1,settings:{},seen:{},wrong:{},history:[],cur:null}, raw||{});
   S.settings = Object.assign({state:'SN',ui:'zh',aux:'zh',showAns:true}, S.settings);
   if(S.settings.ui!=='en') S.settings.ui='zh';
-  if(S.settings.aux!=='en') S.settings.aux='zh';
+  if(S.settings.aux!=='en'&&S.settings.aux!=='') S.settings.aux='zh';
 }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
 function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
@@ -202,7 +202,7 @@ function fmtClock(s){ s=Math.max(0,s); return pad(Math.floor(s/60))+':'+pad(s%60
 function toast(msg){ const el=document.createElement('div'); el.className='toast'; el.textContent=msg; document.body.appendChild(el); setTimeout(()=>el.remove(),3200); }
 function passMark(n){ return Math.ceil(n*17/33); }
 function limitFor(n){ return Math.max(5,Math.round(n*60/33))*60; }
-function aux(q){ return S.settings.aux==='en'? {q:q.eq,o:q.eo} : {q:q.zq,o:q.zo}; }
+function aux(q){ const a=S.settings.aux; if(a==='') return null; return a==='en'? {q:q.eq,o:q.eo} : {q:q.zq,o:q.zo}; }
 
 /* modal */
 function ask(title, body, buttons){
@@ -227,12 +227,12 @@ function qCard(q, o){
       if(o.showAns && j===q.a) cls+=' right';
       if(o.chosen!=null && o.chosen===j && j!==q.a) cls+=' bad';
     }
-    const body = imgs? `<img src="${q.oi[j]}" alt="${esc(tx)}"><span>${esc(tx)}</span>` : `<span>${esc(tx)}</span><span class="aux">${esc(A.o[j])}</span>`;
+    const body = imgs? `<img src="${q.oi[j]}" alt="${esc(tx)}"><span>${esc(tx)}</span>` : `<span>${esc(tx)}</span>${A?`<span class="aux">${esc(A.o[j])}</span>`:''}`;
     return `<label class="${cls}">${inp}<span class="box"></span><span class="otext">${body}</span></label>`;
   }).join('');
   return `<section class="card ${o.mode==='exam'?'':'static'}" data-id="${q.id}">
     <div class="qhead">${o.n!=null?`<span><b>Aufgabe ${o.n+1}</b></span>`:''}${tags.join('')}</div>
-    <p class="q">${esc(q.q)}<span class="aux">${esc(A.q)}</span></p>
+    <p class="q">${esc(q.q)}${A?`<span class="aux">${esc(A.q)}</span>`:''}</p>
     ${q.qi?`<img class="qimg" src="${q.qi}" alt="">`:''}
     <div class="opts ${imgs?'imgs':''}">${opts}</div>
     ${o.tools||''}
@@ -241,10 +241,10 @@ function qCard(q, o){
 
 /* header, tabs, routing */
 function header(){
-  const sel=(id,v)=>`<select id="${id}"><option value="zh" ${v==='zh'?'selected':''}>中文</option><option value="en" ${v==='en'?'selected':''}>English</option></select>`;
+  const sel=(id,v,none)=>`<select id="${id}"><option value="zh" ${v==='zh'?'selected':''}>中文</option><option value="en" ${v==='en'?'selected':''}>English</option>${none?`<option value="" ${v===''?'selected':''}>${t('none')}</option>`:''}</select>`;
   $('top').innerHTML=`<h1>Leben in Deutschland Trainer</h1>
     <label class="f">${t('uiLang')} ${sel('ui',S.settings.ui)}</label>
-    <label class="f">${t('auxLang')} ${sel('aux',S.settings.aux)}</label>`;
+    <label class="f">${t('auxLang')} ${sel('aux',S.settings.aux,true)}</label>`;
   $('foot').textContent=t('foot');
   document.documentElement.lang = S.settings.ui==='en'?'en':'zh';
 }
@@ -472,7 +472,7 @@ document.addEventListener('change',async e=>{
     const f=el.files[0]; if(!f) return;
     try{ const j=JSON.parse(await f.text()); if(!Array.isArray(j.history)) throw 0;
       const r=await ask(t('impTitle'),t('impBody',j.history.length),[{label:t('cancel'),value:false,cls:'ghost'},{label:t('impBtn'),value:true}]);
-      if(r){ S=Object.assign({v:1,settings:{},seen:{},wrong:{},history:[],cur:null},j); S.settings=Object.assign({state:'SN',ui:'zh',aux:'zh',showAns:true},S.settings); if(S.settings.ui!=='en') S.settings.ui='zh'; if(S.settings.aux!=='en') S.settings.aux='zh'; save(); render(); toast(t('imported')); }
+      if(r){ S=Object.assign({v:1,settings:{},seen:{},wrong:{},history:[],cur:null},j); S.settings=Object.assign({state:'SN',ui:'zh',aux:'zh',showAns:true},S.settings); if(S.settings.ui!=='en') S.settings.ui='zh'; if(S.settings.aux!=='en'&&S.settings.aux!=='') S.settings.aux='zh'; save(); render(); toast(t('imported')); }
     }catch(err){ toast(t('invalid')); }
   }
 });
